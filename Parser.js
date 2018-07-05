@@ -10,7 +10,7 @@ function stringParser(text){
 	if(!text.startsWith('"')){
 		return null;
 	}
-	let result = /^"([^"]|\\\")*"/.exec(text);
+	let result = /^"(\\"|[^"])*"/.exec(text);
 	return result != null ? [result[0].substring(1,result[0].length-1),text.substring(result[0].length)] : "Syntax error";
 }
 
@@ -150,3 +150,16 @@ function objectParser(text){
 	}
 
 }
+
+function parseValue(text){
+	let result = validType(text);
+	return result != null && result != "Syntax error" ? result[0] : "Syntax error";
+}
+
+function main(){
+	var fs = require('fs');
+	let text = fs.readFileSync('data.txt');
+	console.log(JSON.stringify(parseValue(text.toString())));
+
+}
+main();
