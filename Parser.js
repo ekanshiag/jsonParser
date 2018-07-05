@@ -153,12 +153,12 @@ function objectParser(text){
 
 function parseValue(text){
 	let result = validType(text);
-	return result != null && result != "Syntax error" ? result[0] : "Syntax error";
+	return result != null && result != "Syntax error" && result[1] == '' ? result[0] : "Syntax error";
 }
 
 function main(){
 	var fs = require('fs');
-	let text = fs.readFileSync('data.txt');
+	let text = fs.readFileSync('bigTwitter.txt');
 	console.log(JSON.stringify(parseValue(text.toString())));
 
 }
