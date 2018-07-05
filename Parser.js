@@ -53,7 +53,7 @@ function factoryParser(...parsers){
 	};
 }
 
-const validType = factoryParser(nullParser,booleanParser,stringParser,numberParser,arrayParser,objectParser);
+const validType = factoryParser(objectParser,arrayParser,nullParser,booleanParser,stringParser,numberParser);
 
 function arrayParser(text){
 	if(!text.startsWith('[')){
@@ -62,7 +62,7 @@ function arrayParser(text){
 	let parsedArr = [];
 	text = text.substring(1);
 	while(1){
-		result = validType(text);
+		let result = validType(text);
 		if(result != null){
 			parsedArr.push(result[0]);
 			text = result[1];
@@ -104,7 +104,7 @@ function objectParser(text){
 		if(result == null){
 			break;
 		}
-		key = result[0];
+		let key = result[0];
 		text = result[1];
 		
 		if(whitespaceParser(text) != null){
