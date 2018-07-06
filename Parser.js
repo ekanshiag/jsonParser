@@ -11,7 +11,10 @@ function stringParser(text){
 		return null;
 	}
 	let result = /^"(\\"|[^"])*"/.exec(text);
-	return result != null ? [result[0].substring(1,result[0].length-1),text.substring(result[0].length)] : "Syntax error";
+	if(result == null){
+		throw Error ("Syntax error");
+	}
+	return [result[0].substring(1,result[0].length-1),text.substring(result[0].length)];
 }
 
 function numberParser(text){
@@ -84,7 +87,7 @@ function arrayParser(text){
 	if(squareCloseParser(text) != null){
 		return [parsedArr, squareCloseParser(text)[1]];
 	}else{
-		return "Syntax error";
+		throw Error ("Syntax error");
 	}
 		
 }
@@ -146,20 +149,20 @@ function objectParser(text){
 	if(curlyCloseParser(text) != null){
 		return [parsedObj, text.substring(1)];
 	}else{
-		return "Syntax error";
+		throw Error ("Syntax error");
 	}
 
 }
 
 function parseValue(text){
 	let result = validType(text);
-	return result != null && result != "Syntax error" && result[1] == '' ? result[0] : "Syntax error";
+	return result[0];
 }
 
 function main(){
 	var fs = require('fs');
-	let text = fs.readFileSync('bigTwitter.txt');
-	console.log(JSON.stringify(parseValue(text.toString())));
+	let text = fs.readFileSync('testData.txt');
+	console.log(JSON.stringify(JSON.parse(text.toString())));
 
 }
 main();
