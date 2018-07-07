@@ -18,7 +18,7 @@ function stringParser(text){
 }
 
 function numberParser(text){
-	let pattern = /^(\-)?(\d)+((\.)\d+((e|E)(\+|\-)\d+)?)?/;
+	let pattern = /^(?:\-)?\d+(?:\.\d+)?(?:(?:e|E)(?:\+|\-)?\d+)?/;
 	let result = pattern.exec(text);
 	return result == null ? null : [Number(result[0]), text.substring(result[0].length)];
 }
@@ -66,22 +66,20 @@ function arrayParser(text){
 	text = text.substring(1);
 	while(1){
 		let result = validType(text);
+		if(result == null){
+			break;
+		}
+		parsedArr.push(result[0]);
+		text = result[1];
+		result = whitespaceParser(text);
 		if(result != null){
-			parsedArr.push(result[0]);
+			text = result[1];
+		}
+		result = commaParser(text);
+		if(result != null){
 			text = result[1];
 		}else{
-			result = whitespaceParser(text);
-			if(result != null){
-				text = result[1];
-				continue;
-			}
-			result = commaParser(text);
-			if(result != null){
-				text = result[1];
-				continue;
-			}else{
-				break;
-			}
+			break;
 		}
 	}
 	if(squareCloseParser(text) != null){
@@ -162,7 +160,7 @@ function parseValue(text){
 function main(){
 	var fs = require('fs');
 	let text = fs.readFileSync('testData.txt');
-	console.log(JSON.stringify(JSON.parse(text.toString())));
+	console.log(JSON.stringify(parseValue(text.toString())));
 
 }
 main();
