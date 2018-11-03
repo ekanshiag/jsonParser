@@ -150,9 +150,4 @@ function parseValue (text) {
   return result[0]
 }
 
-function main () {
-  var fs = require('fs')
-  let text = fs.readFileSync('data.txt')
-  console.log(JSON.stringify(parseValue(text.toString())))
-}
-main()
+module.exports = parseValue
